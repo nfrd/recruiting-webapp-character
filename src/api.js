@@ -14,7 +14,7 @@ export const saveCharacter = async (attributes, skillPoints) => {
         method: "POST",
         body: JSON.stringify({
             attributes,
-            skills: skillPoints,
+            skillPoints,
         }),
         headers: {
             'Content-Type': 'application/json',
