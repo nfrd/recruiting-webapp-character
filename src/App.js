@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import { ATTRIBUTE_LIST, CLASS_LIST, SKILL_LIST } from './consts.js';
+import { fetchCharacter, saveCharacter } from './api';
 import {
   initializeSkillPoints,
   calculateUsedPoints,
@@ -41,12 +42,33 @@ function App() {
     setClassRequirements(CLASS_LIST[el]);
   };
 
+  const loadCharacterData = async () => {
+    try {
+      const data = await fetchCharacter();
+      if (data.body.attributes) setAttributes(data.body.attributes);
+      if (data.body.skillPoints) setSkillPoints(data.body.skillPoints);
+    } catch (error) {
+      console.error('failed to load character:', error);
+    }
+  };
+
+  const saveCharacterData = async () => {
+    try {
+      await saveCharacter(attributes, skillPoints);
+      console.log('character saved');
+    } catch (error) {
+      console.error('failed to save:', error);
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Build Your Character</h1>
       </header>
       <section className="App-section">
+        <button onClick={loadCharacterData}>Load Character</button>
+        <button onClick={saveCharacterData}>Save Character</button>
 
         <div>
           <h2>Profile Stats</h2>
